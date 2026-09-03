@@ -144,12 +144,12 @@ rclone ls r2:n8n-backups
 
 ---
 
-## Stage 7 — Monitoring (10 min, can be same day)
+## Stage 7 — Monitoring ✅ DONE 3 Sep 2026 (UptimeRobot free, monitor "n8n.thinkrep.com" → /healthz, 5-min interval)
 
 Pick one: **UptimeRobot** (free tier: 5-min checks, fine) or **Better Stack** (free: 3-min, nicer alerts). Monitor: HTTPS keyword check on `https://n8n.thinkrep.com/healthz`, expect `"ok"`, alert to email + Telegram/phone.
 Disk: add to the crontab `0 8 * * 1 df -h / | tail -1` piped to the Telegram curl from backup.sh — or just let backup.sh's failure alert be the disk alarm (it will fail first).
 
-**Gate:** pause the tunnel container (`docker compose stop cloudflared`) → alert arrives within 10 min → start it again → recovery notice arrives.
+**Gate (deferred to the first Monday check, 7 Sep):** pause the tunnel container (`docker compose stop cloudflared`) → alert arrives within 10 min → `docker compose start cloudflared` → recovery notice arrives. Also verify the monitor URL is `/healthz` and NOT the bare domain — the bare domain redirects to the Access login page, which returns 200 and would mask a dead n8n.
 
 ---
 
