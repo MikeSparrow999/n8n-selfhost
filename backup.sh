@@ -39,8 +39,10 @@ fi
 echo "  db dump: ${DUMP_BYTES} bytes"
 
 # 2. n8n data volume (config incl. instance id, binary data, custom nodes)
-docker run --rm --user "$(id -u):$(id -g)" -v "${N8N_VOLUME}:/data:ro" -v "${DAY_DIR}:/out" alpine \
-  tar -czf /out/n8n-data.tgz -C /data .
+# runs as root inside the container (the volume is owned by uid 1000 'node', config is mode 600),
+# then hands the finished tarball to the invoking user so chmod/retention work without sudo
+docker run --rm -v "${N8N_VOLUME}:/data:ro" -v "${DAY_DIR}:/out" alpine sh -c \
+  "tar -czf /out/n8n-data.tgz -C /data . && chown $(id -u):$(id -g) /out/n8n-data.tgz"
 echo "  volume:  $(stat -c %s "${DAY_DIR}/n8n-data.tgz") bytes"
 
 # 3. the compose + env that produced this state (env is secret — keep the tarball private)
