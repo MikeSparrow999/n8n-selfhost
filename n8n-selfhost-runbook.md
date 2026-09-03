@@ -82,6 +82,7 @@ Record the result in Atlas.
 | Executions **piling up / slow** | `free -m`, `docker stats` | Cloud VPS 4 is 4 vCPU/8 GB; Gmail Core is 162 nodes — check `EXECUTIONS_DATA_PRUNE` is working: `docker compose exec postgres psql -U postgres n8n -c "select count(*) from execution_entity;"` should stay < 20 000 |
 | **Disk > 85 %** | `ncdu /` | Usually `/var/lib/docker` (old images → `docker system prune -a`) or execution data (lower `EXECUTIONS_DATA_MAX_AGE`) or `backups/` (retention cron missed) |
 | n8n won't start: **"encryption key mismatch"** | `.env` was regenerated | Restore the original `N8N_ENCRYPTION_KEY` from the password manager. There is no other recovery. |
+| n8n: **"password authentication failed for user n8n"** on first boot | `docker compose logs postgres` shows `init-data.sh: Permission denied` | `chmod 755 init-data.sh`, then `docker compose down -v && docker compose up -d` — safe ONLY on an empty instance; `-v` destroys the database |
 | Postgres won't start after reboot | `docker compose logs postgres` | Corrupt WAL after hard power-off → `./restore.sh` from last night |
 | Locked out of SSH | Contabo VNC console | log in as root on the console (root password from Contabo), fix `/etc/ssh/sshd_config.d/10-hardening.conf`, `systemctl reload ssh` |
 | Locked out of **Access** (lost email OTP) | Cloudflare dashboard on any device | Access → Applications → editor → add a second email / temporarily set policy to Bypass |

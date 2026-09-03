@@ -74,7 +74,7 @@ cd /opt/n8n
 # copy in: docker-compose.yml init-data.sh env.example backup.sh restore.sh  (scp from Mac)
 cp env.example .env && chmod 600 .env
 nano .env        # fill: 3 secrets, CLOUDFLARE_TUNNEL_TOKEN. Leave versions as pinned.
-chmod +x init-data.sh backup.sh restore.sh
+chmod 755 init-data.sh backup.sh restore.sh   # 755, not just +x: Postgres runs init-data.sh as an unprivileged user inside the container; a 600/700 file gives "Permission denied" and the n8n DB role is never created
 mkdir -p local-files backups
 docker compose pull
 docker compose up -d
