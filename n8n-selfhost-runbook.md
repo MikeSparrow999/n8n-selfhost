@@ -73,7 +73,7 @@ Record the result in Atlas.
 
 | Symptom | Check | Fix |
 |---|---|---|
-| Uptime alert, site down | `docker compose ps` | container restarting → `docker compose logs --tail 100 <svc>` |
+| Uptime alert, site down | Contabo status page **http://www.contabo-status.com** first (data-centre incident = nothing to fix), then `docker compose ps` | container restarting → `docker compose logs --tail 100 <svc>` |
 | Editor loads, **webhooks return Access login page** | Zero Trust → Access → Applications order | Bypass app must be above the editor app; paths must include `webhook`, `webhook-test`, `form` |
 | Editor loads, webhooks return **404** | Workflow not Published / path typo | Publish; production URL is `/webhook/<path>`, test URL is `/webhook-test/<path>` and only works while "Listen for test event" is on |
 | **530 / 502** from Cloudflare | cloudflared can't reach n8n | `docker compose logs cloudflared`; usually n8n not healthy yet → wait 90 s; or tunnel token rotated |
