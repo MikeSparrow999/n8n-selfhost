@@ -39,7 +39,7 @@ fi
 echo "  db dump: ${DUMP_BYTES} bytes"
 
 # 2. n8n data volume (config incl. instance id, binary data, custom nodes)
-docker run --rm -v "${N8N_VOLUME}:/data:ro" -v "${DAY_DIR}:/out" alpine \
+docker run --rm --user "$(id -u):$(id -g)" -v "${N8N_VOLUME}:/data:ro" -v "${DAY_DIR}:/out" alpine \
   tar -czf /out/n8n-data.tgz -C /data .
 echo "  volume:  $(stat -c %s "${DAY_DIR}/n8n-data.tgz") bytes"
 
