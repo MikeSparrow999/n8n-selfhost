@@ -113,7 +113,7 @@ Deactivate and delete the smoke workflow afterwards.
 
 ---
 
-## Stage 6 — Backups + R2 (20 min)
+## Stage 6 — Backups + R2 ✅ DONE 3 Sep 2026 (20 min, took 45 with the gotchas below)
 
 **6a. R2 bucket** (Cloudflare dashboard → R2): Create bucket `n8n-backups`, location EU/WEUR. R2 → Manage API tokens → Create **Account** API token: `n8n-backup (VPS rclone)`, permission **Object Read & Write**, apply to specific bucket `n8n-backups` only, TTL forever, Client IP filter Include = the VPS IP (token is useless from anywhere else). Note Access Key ID, Secret, and the S3 endpoint `https://<accountid>.r2.cloudflarestorage.com`.
 
