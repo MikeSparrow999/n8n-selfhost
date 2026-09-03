@@ -52,32 +52,18 @@ In window **B** (still root, still open): `ssh n8nops@<ip>` from a *third* windo
 
 ---
 
-## Stage 3 — Cloudflare Tunnel + Access (20 min, browser; Claude in Chrome can drive this with you signed in)
+## Stage 3 — Cloudflare Tunnel + Access ✅ DONE 3 Sep 2026 (Claude in Chrome)
 
-Zero Trust dashboard (one.dash.cloudflare.com):
+Zero Trust account: Free plan, team name `twilight-snow-5211` (auto-assigned; rename under Settings if wanted).
 
-**3a. Tunnel**
-Networks → Tunnels → Create tunnel → Cloudflared → name `n8n-vps` → Save. Copy the **token** from the install command (long `eyJ…` string). → Next.
-Public hostname: subdomain `n8n`, domain `thinkrep.com`, service **HTTP** → `n8n:5678` (the compose service name — cloudflared runs inside the same docker network). Save.
+**3a. Tunnel** `n8n-vps` (cloudflared, remotely managed). Published application route: `n8n.thinkrep.com` → HTTP `n8n:5678`. DNS CNAME created automatically. Token: Networks → Tunnels & Mesh → n8n-vps → Configure → copy from the install command into `.env` as `CLOUDFLARE_TUNNEL_TOKEN`.
 
-**3b. Access — two applications, order matters**
+**3b. Access** (Access controls → Applications):
+- `n8n public endpoints (bypass)` — destinations `n8n.thinkrep.com/webhook`, `/webhook-test`, `/webhook-waiting`, `/form`, `/healthz`; policy `bypass-public-endpoints` = Bypass, Everyone. (Free tier caps an app at 5 hostnames; `rest/oauth2-credential/callback` is deliberately omitted — that redirect is followed by your own logged-in browser, which carries the Access cookie.)
+- `n8n editor` — destination `n8n.thinkrep.com` (all other paths); policy `allow-mike` = Allow, Emails = mike@funnelsix.com; session 24 h; identity = One-time PIN.
+- Ordering: the current dashboard evaluates Bypass/Service-Auth policies before Allow policies, so no manual reordering is needed.
 
-*Application 1 (evaluated first): "n8n public endpoints"*
-Access → Applications → Add → Self-hosted → name as above → domain `n8n.thinkrep.com`, path — add **all** of these as separate entries:
-- `webhook` (covers `/webhook/*`)
-- `webhook-test`
-- `webhook-waiting`
-- `form` (form triggers: Keyword Research, Logo Working, Product Photography)
-- `healthz` (external uptime monitor)
-- `rest/oauth2-credential/callback` (Google OAuth redirect lands here)
-Policy: name `bypass`, action **Bypass**, include **Everyone**.
-
-*Application 2: "n8n editor"*
-Same domain, no path (covers everything else). Policy: action **Allow**, include **Emails** = your address(es). Session duration 24 h. Identity provider: One-time PIN is enough (or Google if already set up).
-
-**3c. Order check:** Applications list — the Bypass app must sit **above** the editor app. Drag if needed.
-
-**Gate:** `curl -sI https://n8n.thinkrep.com/webhook/x` returns a Cloudflare **530** or **502** (tunnel exists, origin down) — *not* a 302 to `cloudflareaccess.com`. `curl -sI https://n8n.thinkrep.com/` **does** 302 to cloudflareaccess.com. If both redirect, the Bypass app is below the editor app or the paths are wrong. Fix before stage 4 — this is the single most common way this build fails while looking healthy.
+**Gate (passed 3 Sep before the VPS existed):** `https://n8n.thinkrep.com/healthz` → Cloudflare Error 1033 (tunnel not connected, *no* login challenge); `https://n8n.thinkrep.com/` → redirect to `*.cloudflareaccess.com`. Re-run the same two checks after stage 4: healthz must then return `{"status":"ok"}`.
 
 ---
 
