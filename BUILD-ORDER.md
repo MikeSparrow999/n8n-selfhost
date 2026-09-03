@@ -67,7 +67,7 @@ Zero Trust account: Free plan, team name `twilight-snow-5211` (auto-assigned; re
 
 ---
 
-## Stage 4 — Bring the stack up (20 min, SSH as n8nops)
+## Stage 4 — Bring the stack up ✅ DONE 3 Sep 2026 (20 min, SSH as n8nops)
 
 ```bash
 cd /opt/n8n
@@ -82,7 +82,7 @@ docker compose ps            # all three "healthy" within ~90 s
 docker compose logs -f n8n   # wait for "Editor is now accessible via: https://n8n.thinkrep.com/"
 ```
 
-Browser → https://n8n.thinkrep.com → Access login (OTP to your email) → n8n **owner account setup** (this is a fresh instance; use the funnelsix address, strong password in the password manager).
+Browser → https://n8n.thinkrep.com → Cloudflare Access login → n8n **owner account setup** (done 3 Sep; owner = mike@funnelsix.com, password in password manager 'n8n self-host owner') (this is a fresh instance; use the funnelsix address, strong password in the password manager).
 
 Settings → check the version shows 2.37.9. Settings → Community nodes: leave off. Settings → Log streaming: n/a.
 
@@ -93,7 +93,9 @@ Settings → check the version shows 2.37.9. Settings → Community nodes: leave
 
 ---
 
-## Stage 5 — Prove a webhook end-to-end (15 min) ← THE REAL GATE
+## Stage 5 — Prove a webhook end-to-end ✅ PASSED 3 Sep 2026 (15 min) ← THE REAL GATE
+
+Result: `/webhook/smoke` returned 200 `{"message":"Workflow was started"}` from Chrome AND from a phone on mobile data (no cookies). Note: some phone browsers flag a brand-new hostname as suspicious the first time — expected for a domain with no reputation yet; it still served the JSON. Identity provider on the editor app turned out to be the Cloudflare dashboard login (not OTP) — fine, still restricted to mike@funnelsix.com by the allow policy.
 
 In the new n8n: New workflow → Webhook node, path `smoke`, method GET, Respond = "Immediately", response body `{"ok":true}` → Save → **Activate** (Publish).
 
