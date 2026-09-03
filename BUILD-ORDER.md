@@ -134,7 +134,7 @@ ls -l backups/*/         # n8n-db.dump must be > 10 KB (fresh schema is ~60–10
 rclone ls r2:n8n-backups
 ```
 
-**6d. Cron:** `crontab -e` → `15 3 * * * /opt/n8n/backup.sh >> /opt/n8n/backups/backup.log 2>&1`
+**6d. Cron (installed 3 Sep):** `(crontab -l 2>/dev/null; echo '15 3 * * * /opt/n8n/backup.sh >> /opt/n8n/backups/backup.log 2>&1') | crontab -`
 
 **6e. Optional but recommended today:** fill `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` in `.env` (reuse the Error Logger bot) so a failed backup pings you.
 
