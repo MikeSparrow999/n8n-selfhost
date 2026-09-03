@@ -122,7 +122,7 @@ Deactivate and delete the smoke workflow afterwards.
 # ONE line — a line break loses the later args. Do NOT set acl= (R2 has no ACLs → 501). no_check_bucket is REQUIRED with a bucket-scoped token
 # (otherwise rclone tries to create the bucket first and R2 returns 403 AccessDenied on every write).
 rclone config create r2 s3 provider=Cloudflare access_key_id=<id> secret_access_key=<secret> endpoint=https://<accountid>.r2.cloudflarestorage.com no_check_bucket=true
-echo 'RCLONE_BIND_ADDR=185.194.218.192' >> /opt/n8n/.env   # token is IP-filtered; the VPS has IPv6 too — without this, ~half of rclone calls 403
+echo 'RCLONE_BIND=185.194.218.192' >> /opt/n8n/.env   # token is IP-filtered; the VPS has IPv6 too — without this, ~half of rclone calls 403
 rclone --bind 185.194.218.192 lsd r2:n8n-backups      # bucket-scoped token: `rclone lsd r2:` (account level) is EXPECTED to 403
 echo test > /tmp/t.txt && rclone copy /tmp/t.txt r2:n8n-backups/_probe/ && rclone delete r2:n8n-backups/_probe/ && echo WRITE-OK
 ```
