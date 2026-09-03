@@ -153,14 +153,15 @@ Disk: add to the crontab `0 8 * * 1 df -h / | tail -1` piped to the Telegram cur
 
 ---
 
-## Stage 8 — Google OAuth client (30 min, do before 21 Sep, not on build day)
+## Stage 8 — Google OAuth client ✅ DONE 3 Sep 2026 (Claude in Chrome)
 
-Every Gmail/Drive/Sheets credential on the new box needs your own OAuth client (Cloud's "Managed OAuth" isn't available self-hosted).
+Google Cloud project **`n8n-selfhost`** (ID `n8n-selfhost-507520`, org funnelsix.com). APIs enabled: Gmail, Drive, Sheets.
+OAuth app "n8n self-host (Atlas)": audience **External** (needed because the "Atlas Money 16" mailbox is a separate @gmail.com account outside the Workspace), publishing status **In production** (so refresh tokens do not expire after 7 days). Branding: home/privacy/terms links point at n8n.thinkrep.com (placeholders on the authorised domain — required to unlock Publish; Google does not fetch them).
+Client: Web application `n8n.thinkrep.com`, redirect URI `https://n8n.thinkrep.com/rest/oauth2-credential/callback`. **Client ID + secret are in the password manager as "n8n self-host Google OAuth".**
 
-1. console.cloud.google.com → project "Atlas n8n" (new or existing) → APIs & Services → enable **Gmail API, Google Drive API, Google Sheets API**.
-2. OAuth consent screen → **Internal** if funnelsix.com is Google Workspace; otherwise External → **Publish app** (no verification needed for your own use, but unpublished "Testing" apps expire refresh tokens after **7 days** — this is why the Error Logger died on Cloud after six months and would die weekly here).
-3. Credentials → Create OAuth client ID → Web application → Authorised redirect URI: `https://n8n.thinkrep.com/rest/oauth2-credential/callback`.
-4. Note client ID + secret → password manager. You'll paste them into each Google credential in n8n on migration day.
+On migration day each Google credential in n8n takes that client ID/secret; when you click Connect, Google shows **"Google hasn't verified this app" → Advanced → Go to n8n self-host (Atlas)** once per account — expected for an unverified single-user app, not an error. User cap is 100 lifetime grants; two accounts × three scopes is nowhere near it.
+
+If the hostname ever changes: add the new callback URL to this client (Clients → n8n.thinkrep.com → redirect URIs) and to Branding → authorised domains.
 
 ---
 
