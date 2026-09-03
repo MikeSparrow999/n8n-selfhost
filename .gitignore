@@ -1,0 +1,7 @@
+# secrets and runtime state never go to git
+.env
+*.env
+backups/
+local-files/
+*.dump
+*.tgz
