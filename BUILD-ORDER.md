@@ -25,7 +25,7 @@ Files in this folder:
 
 ## Stage 1 — Provision (10 min + ~5 min Contabo build)
 
-Contabo → Cloud VPS **10 NVMe** (or above) → Ubuntu **24.04** → region EU (Nuremberg or UK if offered) → add your SSH public key in the order form if it lets you → order.
+Contabo → **Core** line → **Cloud VPS 4** (4 vCPU, 8 GB, 100 GB SSD; the old "VPS 10 NVMe" tier no longer exists as of Sep 2026) → term **1 month** → Ubuntu **24.04** (Operating System tab — NOT the "n8n" 1-click app) → region EU (Germany) or UK → SSH public key in the order form if offered → no add-ons → order.
 Note the IPv4, the root password from the email, and the **renewal date**.
 
 - [ ] Add to Atlas Infrastructure → Hosting & Subscriptions now, not later (name, IP, plan, monthly cost, renewal date, purpose = "n8n automation host"). The research-engine VPS was only recorded months late — don't repeat that.

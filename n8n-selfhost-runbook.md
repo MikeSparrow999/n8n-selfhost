@@ -79,7 +79,7 @@ Record the result in Atlas.
 | **530 / 502** from Cloudflare | cloudflared can't reach n8n | `docker compose logs cloudflared`; usually n8n not healthy yet → wait 90 s; or tunnel token rotated |
 | "Couldn't connect" on a **Google** credential | Refresh token expired | Reconnect. If it happens weekly → OAuth app still in Testing status (BUILD-ORDER §8) |
 | **Airtable 401** | PAT revoked/rotated | New PAT, base-scoped (see inventory doc); update credential |
-| Executions **piling up / slow** | `free -m`, `docker stats` | VPS 10 is 4 vCPU/8 GB-ish; Gmail Core is 162 nodes — check `EXECUTIONS_DATA_PRUNE` is working: `docker compose exec postgres psql -U postgres n8n -c "select count(*) from execution_entity;"` should stay < 20 000 |
+| Executions **piling up / slow** | `free -m`, `docker stats` | Cloud VPS 4 is 4 vCPU/8 GB; Gmail Core is 162 nodes — check `EXECUTIONS_DATA_PRUNE` is working: `docker compose exec postgres psql -U postgres n8n -c "select count(*) from execution_entity;"` should stay < 20 000 |
 | **Disk > 85 %** | `ncdu /` | Usually `/var/lib/docker` (old images → `docker system prune -a`) or execution data (lower `EXECUTIONS_DATA_MAX_AGE`) or `backups/` (retention cron missed) |
 | n8n won't start: **"encryption key mismatch"** | `.env` was regenerated | Restore the original `N8N_ENCRYPTION_KEY` from the password manager. There is no other recovery. |
 | Postgres won't start after reboot | `docker compose logs postgres` | Corrupt WAL after hard power-off → `./restore.sh` from last night |
